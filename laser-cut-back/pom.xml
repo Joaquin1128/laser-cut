@@ -51,7 +51,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Kabeja DXF parser -->
+		<dependency>
+			<groupId>org.kabeja</groupId>
+			<artifactId>kabeja</artifactId>
+			<version>0.4</version>
+		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>logicaldoc</id>
+			<url>https://logicaldoc.sourceforge.net/maven/</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
