@@ -1,8 +1,5 @@
 package com.example.lasercut.laser_cut_back.dto;
 
-/**
- * DTO de salida para la cotización.
- */
 public class CotizacionResponse {
     private String material;
     private double ancho;

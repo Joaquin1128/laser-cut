@@ -2,9 +2,6 @@ package com.example.lasercut.laser_cut_back.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * DTO de entrada para la cotización.
- */
 public class CotizacionRequest {
     private MultipartFile archivo;
     private double espesor;
