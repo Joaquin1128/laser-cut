@@ -28,9 +28,11 @@ public class CotizacionController {
             @RequestParam MultipartFile archivo,
             @RequestParam double espesor,
             @RequestParam String material,
-            @RequestParam int cantidad
+            @RequestParam int cantidad,
+            @RequestParam String unidad
     ) throws IOException {
-        CotizacionResponse resp = cotizacionService.calcular(archivo, espesor, material, cantidad);
+        CotizacionResponse resp = cotizacionService.calcular(archivo, espesor, material, cantidad, unidad);
         return ResponseEntity.ok(resp);
     }
+    
 }

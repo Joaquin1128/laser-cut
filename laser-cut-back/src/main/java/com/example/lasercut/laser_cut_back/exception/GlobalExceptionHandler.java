@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(BadRequestException.class)
@@ -30,4 +31,14 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
+
+    @ExceptionHandler(PreviewGenerationException.class)
+    public ResponseEntity<Map<String, Object>> handlePreviewGeneration(PreviewGenerationException ex) {
+        logger.warn("Error generando vista previa DXF", ex);
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "Preview Generation Error");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
 }

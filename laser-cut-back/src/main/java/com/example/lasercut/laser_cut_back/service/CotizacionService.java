@@ -15,6 +15,7 @@ import com.example.lasercut.laser_cut_back.util.DxfParser;
 
 @Service
 public class CotizacionService {
+
     private static final Logger logger = LoggerFactory.getLogger(CotizacionService.class);
 
     private static final double FACTOR_DENSIDAD = 8.0;
@@ -50,12 +51,19 @@ public class CotizacionService {
         return bd.doubleValue();
     }
 
-    public CotizacionResponse calcular(MultipartFile archivo, double espesorMm, String material, int cantidad) throws IOException {
+    public CotizacionResponse calcular(MultipartFile archivo, double espesorMm, String material, int cantidad, String unidad) throws IOException {
         validateInputs(archivo, espesorMm, material, cantidad);
 
         double[] wh = DxfParser.getWidthHeightMillimeters(archivo.getInputStream());
         double ancho = wh[0];
         double alto = wh[1];
+
+        if ("cm".equalsIgnoreCase(unidad)) {
+            ancho *= 10;
+            alto *= 10;
+        } else if (!"mm".equalsIgnoreCase(unidad)) {
+            throw new BadRequestException("Unidad no soportada. Opciones válidas: 'mm' o 'cm'");
+        }
 
         double peso = (ancho * alto * espesorMm * FACTOR_DENSIDAD) / 1_000_000.0;
         double precioUnitario = peso * PRECIO_POR_KG;
@@ -73,11 +81,13 @@ public class CotizacionService {
         resp.setPeso(peso);
         resp.setPrecioUnitario(precioUnitario);
         resp.setCantidad(cantidad);
+        resp.setUnidad(unidad);
         resp.setPrecioTotal(precioTotal);
 
-        logger.info("Cotización calculada: material={}, ancho={}mm, alto={}mm, espesor={}mm, peso={}kg, precioUnitario={}, cantidad={}, precioTotal={}",
-                material, ancho, alto, espesorMm, peso, precioUnitario, cantidad, precioTotal);
+        logger.info("Cotización calculada: material={}, ancho={}mm, alto={}mm, espesor={}mm, peso={}kg, precioUnitario={}, cantidad={}, unidad={}, precioTotal={}",
+            material, ancho, alto, espesorMm, peso, precioUnitario, cantidad, unidad, precioTotal);
 
         return resp;
     }
+
 }

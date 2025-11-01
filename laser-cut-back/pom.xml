@@ -58,6 +58,35 @@
 			<artifactId>kabeja</artifactId>
 			<version>0.4</version>
 		</dependency>
+
+		<!-- Kabeja SVG generator (separate module) -->
+		<dependency>
+			<groupId>org.kabeja</groupId>
+			<artifactId>kabeja-svg</artifactId>
+			<version>0.4</version>
+		</dependency>
+
+		<!-- Apache Batik (necesario para la serialización SVG/PNG usada por Kabeja) -->
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-transcoder</artifactId>
+			<version>1.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-dom</artifactId>
+			<version>1.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-svggen</artifactId>
+			<version>1.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-awt-util</artifactId>
+			<version>1.16</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>

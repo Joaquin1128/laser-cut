@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.example.lasercut.laser_cut_back.exception.BadRequestException;
 
 public class DxfParser {
+
     private static final Logger logger = LoggerFactory.getLogger(DxfParser.class);
 
     public static double[] getWidthHeightMillimeters(InputStream is) throws IOException {
@@ -47,4 +48,5 @@ public class DxfParser {
             throw new BadRequestException("Error al procesar el archivo DXF: " + e.getMessage());
         }
     }
+
 }

@@ -1,6 +1,7 @@
 package com.example.lasercut.laser_cut_back.dto;
 
 public class CotizacionResponse {
+
     private String material;
     private double ancho;
     private double alto;
@@ -8,12 +9,13 @@ public class CotizacionResponse {
     private double peso;
     private double precioUnitario;
     private int cantidad;
+    private String unidad;
     private double precioTotal;
 
     public CotizacionResponse() {
     }
 
-    public CotizacionResponse(String material, double ancho, double alto, double espesor, double peso, double precioUnitario, int cantidad, double precioTotal) {
+    public CotizacionResponse(String material, double ancho, double alto, double espesor, double peso, double precioUnitario, int cantidad, String unidad, double precioTotal) {
         this.material = material;
         this.ancho = ancho;
         this.alto = alto;
@@ -21,6 +23,7 @@ public class CotizacionResponse {
         this.peso = peso;
         this.precioUnitario = precioUnitario;
         this.cantidad = cantidad;
+        this.unidad = unidad;
         this.precioTotal = precioTotal;
     }
 
@@ -80,6 +83,14 @@ public class CotizacionResponse {
         this.cantidad = cantidad;
     }
 
+    public String getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(String unidad) {
+        this.unidad = unidad;
+    }
+
     public double getPrecioTotal() {
         return precioTotal;
     }
@@ -87,4 +98,5 @@ public class CotizacionResponse {
     public void setPrecioTotal(double precioTotal) {
         this.precioTotal = precioTotal;
     }
+    
 }
