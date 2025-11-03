@@ -24,6 +24,24 @@ public class Material {
     @Column(nullable = false)
     private double precioPorKg;
 
+    public Material() {
+    }
+
+    public Material(Long id, String nombre, double densidad, double precioPorKg) {
+        this.id = id;
+        this.nombre = nombre;
+        this.densidad = densidad;
+        this.precioPorKg = precioPorKg;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNombre() {
         return nombre;
     }
