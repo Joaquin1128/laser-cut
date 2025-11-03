@@ -12,7 +12,6 @@ function Step2({ wizardState, onNext }) {
         Selecciona el tipo de corte para tu proyecto
       </p>
 
-      {/* Opciones de tipo de corte */}
       <div className="option-grid">
         <button
           className={`option-card ${cutType === 'Laser' ? 'selected' : ''}`}
@@ -26,7 +25,6 @@ function Step2({ wizardState, onNext }) {
         </button>
       </div>
 
-      {/* Botón siguiente */}
       <div className="step-actions">
         <button
           className="btn-primary"
@@ -41,4 +39,3 @@ function Step2({ wizardState, onNext }) {
 }
 
 export default Step2;
-

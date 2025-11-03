@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import './Wizard.css';
@@ -11,9 +11,9 @@ import Step4 from './Step4';
 function Wizard() {
   const navigate = useNavigate();
   const location = useLocation();
+  const hasInitialized = useRef(false);
   const [currentStep, setCurrentStep] = useState(1);
   
-  // Estado compartido entre steps
   const [file, setFile] = useState(null);
   const [fileData, setFileData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,21 +25,23 @@ function Wizard() {
   const [quantity, setQuantity] = useState(1);
   const [quoteData, setQuoteData] = useState(null);
 
-  // Recibir archivo desde la navegación
   useEffect(() => {
-    if (location.state) {
-      if (location.state.file) {
-        setFile(location.state.file);
-      }
-      if (location.state.fileData) {
-        setFileData(location.state.fileData);
-        // Si ya tenemos los datos del archivo, confirmamos MM como unidad por defecto
-        setUnitConfirmed(true);
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      if (location.state) {
+        if (location.state.file) {
+          setFile(location.state.file);
+        }
+        if (location.state.fileData) {
+          setFileData(location.state.fileData);
+          setUnitConfirmed(true);
+        }
+      } else {
+        navigate('/upload', { replace: true });
       }
     }
-  }, [location.state]);
+  }, [location.state, navigate]);
 
-  // Funciones de navegación
   const handleNext = () => {
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
@@ -56,7 +58,6 @@ function Wizard() {
     }
   };
 
-  // Estado para compartir entre componentes
   const wizardState = {
     file,
     setFile,
@@ -80,7 +81,6 @@ function Wizard() {
     setQuoteData,
   };
 
-  // Renderizar step actual
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -98,7 +98,6 @@ function Wizard() {
 
   return (
     <div className="wizard">
-      {/* Header fijo con progress bar centrado y login */}
       <div className="wizard-header-top">
         <div className="wizard-logo">Corte Láser 2D</div>
         <div className="progress-bar">
@@ -119,19 +118,15 @@ function Wizard() {
       </div>
 
       <div className="wizard-container">
-        {/* Botón volver */}
         <button className="btn-back-wizard" onClick={handleBack}>
           ← Volver
         </button>
 
-        {/* Contenedor principal: preview + step */}
         <div className="wizard-content">
-          {/* Preview a la izquierda */}
           <div className="wizard-preview">
             <Preview fileData={fileData} quoteData={quoteData} />
           </div>
 
-          {/* Step actual a la derecha */}
           <div className="wizard-step">
             {renderStep()}
           </div>
@@ -142,4 +137,3 @@ function Wizard() {
 }
 
 export default Wizard;
-

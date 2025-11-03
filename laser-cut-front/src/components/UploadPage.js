@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
-import { FaLock } from 'react-icons/fa';
+import { FaLock, FaFileUpload, FaIndustry, FaShippingFast } from 'react-icons/fa';
 import './UploadPage.css';
 import dxfIcon from '../assets/icons/dxf.png';
 import { analizarArchivo } from '../services/api';
@@ -16,7 +16,6 @@ function UploadPage() {
 
     const selectedFile = acceptedFiles[0];
 
-    // Validar extensión
     if (!selectedFile.name.toLowerCase().endsWith('.dxf')) {
       setError('Por favor, sube un archivo DXF válido');
       return;
@@ -26,10 +25,8 @@ function UploadPage() {
     setError(null);
 
     try {
-      // Llamar al endpoint POST /analizar-archivo
       const data = await analizarArchivo(selectedFile);
       
-      // Navegar al wizard con el archivo y los datos
       navigate('/wizard', { 
         state: { 
           file: selectedFile, 
@@ -66,7 +63,6 @@ function UploadPage() {
 
   return (
     <div className="upload-page">
-      {/* Toolbar superior */}
       <div className="landing-header">
         <div className="landing-logo">Corte Láser 2D</div>
         <button className="btn-login-header" onClick={() => {}}>
@@ -74,9 +70,7 @@ function UploadPage() {
         </button>
       </div>
 
-      {/* Contenido principal */}
       <div className="landing-content-wrapper">
-        {/* Zona de drop */}
         {isProcessing ? (
           <div className="processing-container">
             <div className="processing-spinner">
@@ -105,21 +99,47 @@ function UploadPage() {
             
             <div className="security-message">
               <FaLock className="security-icon" />
-              <span>¡Tu diseño está seguro! Cualquier archivo subido es seguro y conservas el 100% de los derechos de propiedad intelectual.</span>
+              <span><strong>¡Tu diseño está en buenas manos!</strong> Tus archivos se tratarán con confidencialidad, y conservarás todos tus derechos de propiedad intelectual.</span>
             </div>
           </div>
         )}
 
-         {/* Error message */}
          {error && (
            <div className="error-message-upload">
              {error}
            </div>
          )}
+
+        {!isProcessing && (
+          <div className="process-steps">
+            <div className="process-step">
+              <FaFileUpload className="process-step-icon" />
+              <h3 className="process-step-title">Subí tu diseño</h3>
+              <p className="process-step-description">
+                Cargá tu archivo 2D o 3D, elegí material y proceso. Recibí la cotización al instante.
+              </p>
+            </div>
+          
+            <div className="process-step">
+              <FaIndustry className="process-step-icon" />
+              <h3 className="process-step-title">Confirmá tu pedido</h3>
+              <p className="process-step-description">
+                Revisá los detalles y confirmá tu orden. Comenzamos la producción de inmediato.
+              </p>
+            </div>
+          
+            <div className="process-step">
+              <FaShippingFast className="process-step-icon" />
+              <h3 className="process-step-title">Recibí tus piezas</h3>
+              <p className="process-step-description">
+                Enviamos tus piezas con control de calidad y seguimiento de envío en tiempo real.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default UploadPage;
-

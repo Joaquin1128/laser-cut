@@ -9,7 +9,6 @@ function Step3({ wizardState, onNext }) {
     setThickness,
   } = wizardState;
 
-  // Materiales disponibles
   const materials = {
     'Hierro': [
       { value: '0.5', label: '0.5 mm' },
@@ -25,14 +24,12 @@ function Step3({ wizardState, onNext }) {
     ]
   };
 
-  // Validar si se puede continuar
   const canContinue = material && thickness;
 
   return (
     <div className="step">
       <h3 className="step-title">Seleccionar material</h3>
 
-      {/* Selección de categoría de material */}
       <div className="material-categories">
         <label className="form-label">Categoría</label>
         <div className="category-list">
@@ -52,7 +49,6 @@ function Step3({ wizardState, onNext }) {
         </div>
       </div>
 
-      {/* Selección de material específico y espesor */}
       {material && (
         <div className="material-selection">
           <label className="form-label">Espesor</label>
@@ -73,7 +69,6 @@ function Step3({ wizardState, onNext }) {
         </div>
       )}
 
-      {/* Botón siguiente */}
       <div className="step-actions">
         <button
           className="btn-primary"

@@ -21,12 +21,10 @@ function Step4({ wizardState, onBack }) {
   const [quoteRequested, setQuoteRequested] = useState(false);
   const [tempQuantity, setTempQuantity] = useState(1);
 
-  // Efecto para actualizar la cantidad cuando cambia tempQuantity
   useEffect(() => {
     setQuantity(tempQuantity);
   }, [tempQuantity, setQuantity]);
 
-  // Solicitar cotización
   const handleGetQuote = async () => {
     if (!file || !material || !thickness || !tempQuantity) {
       setError('Por favor, completa todos los campos');
@@ -37,7 +35,6 @@ function Step4({ wizardState, onBack }) {
     setError(null);
 
     try {
-      // Llamar al endpoint POST /cotizacion
       const data = await calcularCotizacion({
         archivo: file,
         material,
@@ -59,7 +56,6 @@ function Step4({ wizardState, onBack }) {
     <div className="step">
       <h3 className="step-title">Cantidad</h3>
 
-      {/* Selector de cantidad */}
       <div className="quantity-selector">
         <label className="form-label">Cantidad</label>
         <div className="quantity-controls">
@@ -89,7 +85,6 @@ function Step4({ wizardState, onBack }) {
         </div>
       </div>
 
-      {/* Loading indicator */}
       {isLoading && (
         <div className="loading">
           <div className="spinner"></div>
@@ -97,10 +92,8 @@ function Step4({ wizardState, onBack }) {
         </div>
       )}
 
-      {/* Error message */}
       {error && <div className="error-message">{error}</div>}
 
-      {/* Acciones */}
       <div className="step-actions">
         {!quoteRequested ? (
           <>

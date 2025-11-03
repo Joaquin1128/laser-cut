@@ -2,9 +2,7 @@ import React from 'react';
 import './Preview.css';
 
 function Preview({ fileData, quoteData }) {
-  // Si hay quote data, mostrar información de la cotización
   if (quoteData) {
-    // Decodificar SVG desde base64
     const decodedSvg = fileData && fileData.vistaPreviaBase64 
       ? atob(fileData.vistaPreviaBase64) 
       : null;
@@ -49,9 +47,7 @@ function Preview({ fileData, quoteData }) {
     );
   }
 
-  // Si solo hay file data, mostrar preview del archivo
   if (fileData) {
-    // Decodificar SVG desde base64
     const decodedSvg = fileData.vistaPreviaBase64 
       ? atob(fileData.vistaPreviaBase64) 
       : null;
@@ -92,7 +88,6 @@ function Preview({ fileData, quoteData }) {
     );
   }
 
-  // Estado vacío
   return (
     <div className="preview">
       <h3 className="preview-title">Preview</h3>
@@ -107,4 +102,3 @@ function Preview({ fileData, quoteData }) {
 }
 
 export default Preview;
-

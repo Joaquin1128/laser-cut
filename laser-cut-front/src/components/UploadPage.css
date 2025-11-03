@@ -5,7 +5,6 @@
   flex-direction: column;
 }
 
-/* Toolbar superior */
 .landing-header {
   background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
   padding: 1rem 3rem;
@@ -39,7 +38,6 @@
   background: #3a3a3a;
 }
 
-/* Contenedor principal */
 .landing-content-wrapper {
   flex: 1;
   max-width: 1200px;
@@ -52,7 +50,6 @@
   justify-content: center;
 }
 
-/* Dropzone container */
 .dropzone-container {
   border: 3px dashed #d1d5db;
   border-radius: 8px;
@@ -69,7 +66,6 @@
   background: #fef2f2;
 }
 
-/* Procesando archivo */
 .processing-container {
   border: 3px solid #d32f2f;
   border-radius: 8px;
@@ -100,7 +96,6 @@
   margin: 0;
 }
 
-/* Loading spinner */
 .spinner {
   width: 50px;
   height: 50px;
@@ -116,7 +111,6 @@
   }
 }
 
-/* Error message */
 .error-message-upload {
   background: #fee;
   border: 2px solid #fcc;
@@ -129,7 +123,6 @@
   max-width: 1200px;
 }
 
-/* Iconos de tipos de archivo */
 .file-type-icons {
   display: flex;
   gap: 1.5rem;
@@ -144,7 +137,6 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-/* Texto principal del dropzone */
 .dropzone-main-text {
   font-size: 1.5rem;
   font-weight: 500;
@@ -152,14 +144,12 @@
   margin-bottom: 1rem;
 }
 
-/* Divisor "o" */
 .dropzone-divider {
   font-size: 1rem;
   color: #718096;
   margin: 1.5rem 0;
 }
 
-/* Botón buscar archivos */
 .btn-browse-files {
   background: #d32f2f;
   color: white;
@@ -178,7 +168,6 @@
   box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
 }
 
-/* Mensaje de seguridad */
 .security-message {
   display: flex;
   align-items: center;
@@ -193,7 +182,53 @@
   font-size: 1rem;
 }
 
-/* Responsive */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.process-step {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: border-color 0.3s ease, transform 0.2s ease;
+}
+
+.process-step:hover {
+  border-color: #d32f2f;
+  transform: translateY(-3px);
+}
+
+.process-step-icon {
+  font-size: 2rem;
+  color: #d32f2f;
+  margin-bottom: 1rem;
+}
+
+.process-step-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+.process-step-description {
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
+  line-height: 1.5;
+}
+
 @media (max-width: 768px) {
   .landing-header {
     padding: 1rem 1.5rem;
@@ -224,5 +259,9 @@
     width: 40px;
     height: 40px;
   }
-}
 
+  .process-steps {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

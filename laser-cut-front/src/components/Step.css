@@ -1,4 +1,3 @@
-/* Contenedor base del step */
 .step {
   display: flex;
   flex-direction: column;
@@ -18,7 +17,6 @@
   margin: 0;
 }
 
-/* Zona de carga de archivo */
 .upload-area {
   margin: 1rem 0;
 }
@@ -71,7 +69,6 @@
   word-break: break-all;
 }
 
-/* Formularios */
 .form-section {
   display: flex;
   flex-direction: column;
@@ -100,7 +97,6 @@
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
-/* Opciones de selección */
 .option-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -146,7 +142,6 @@
   margin: 0;
 }
 
-/* Confirmación de unidad */
 .unit-confirmation {
   background: white;
   padding: 2rem;
@@ -198,7 +193,6 @@
   margin-bottom: 2rem;
 }
 
-/* Material categories */
 .material-categories {
   margin-bottom: 2rem;
 }
@@ -253,7 +247,6 @@
   margin: 0.25rem 0 0 0;
 }
 
-/* Material selection */
 .material-selection {
   margin-bottom: 2rem;
 }
@@ -293,7 +286,6 @@
   font-weight: 600;
 }
 
-/* Quantity selector */
 .quantity-selector {
   margin-bottom: 2rem;
 }
@@ -360,7 +352,6 @@
   cursor: pointer;
 }
 
-/* Resumen */
 .summary {
   background: #fafafa;
   border: 1px solid #e5e5e5;
@@ -389,7 +380,6 @@
   font-weight: 500;
 }
 
-/* Exito en cotización */
 .quote-success {
   text-align: center;
   padding: 2rem;
@@ -412,7 +402,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* Loading */
 .loading {
   display: flex;
   flex-direction: column;
@@ -442,7 +431,6 @@
   margin: 0;
 }
 
-/* Error message */
 .error-message {
   background: #fee;
   border: 2px solid #fcc;
@@ -452,7 +440,6 @@
   font-size: 0.95rem;
 }
 
-/* Acciones del step */
 .step-actions {
   display: flex;
   justify-content: space-between;
@@ -466,7 +453,6 @@
   justify-content: flex-end;
 }
 
-/* Botones */
 .btn-primary,
 .btn-secondary,
 .btn-link {
@@ -524,7 +510,6 @@
   text-decoration: underline;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .option-grid {
     grid-template-columns: 1fr;
@@ -539,4 +524,3 @@
     width: 100%;
   }
 }
-
