@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaCheckCircle } from 'react-icons/fa';
 import './Step.css';
 import { calcularCotizacion } from '../services/api';
 
@@ -120,7 +121,7 @@ function Step4({ wizardState, onBack }) {
           </>
         ) : (
           <div className="quote-success">
-            <div className="success-icon">✓</div>
+            <FaCheckCircle className="success-icon" />
             <h4>¡Cotización generada exitosamente!</h4>
             <p className="success-message">
               Tu cotización se muestra en el panel de preview.

@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaBolt } from 'react-icons/fa';
 import './Step.css';
 
 function Step2({ wizardState, onNext }) {
@@ -17,7 +18,7 @@ function Step2({ wizardState, onNext }) {
           className={`option-card ${cutType === 'Laser' ? 'selected' : ''}`}
           onClick={() => setCutType('Laser')}
         >
-          <div className="option-icon">⚡</div>
+          <FaBolt className="option-icon" />
           <h4 className="option-title">Laser</h4>
           <p className="option-description">
             Corte láser de alta precisión

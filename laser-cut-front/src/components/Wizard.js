@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FaCheck } from 'react-icons/fa';
 import './Wizard.css';
 import Preview from './Preview';
 import Step1 from './Step1';
@@ -6,7 +8,9 @@ import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
 
-function Wizard({ onBack }) {
+function Wizard() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
   
   // Estado compartido entre steps
@@ -21,6 +25,20 @@ function Wizard({ onBack }) {
   const [quantity, setQuantity] = useState(1);
   const [quoteData, setQuoteData] = useState(null);
 
+  // Recibir archivo desde la navegación
+  useEffect(() => {
+    if (location.state) {
+      if (location.state.file) {
+        setFile(location.state.file);
+      }
+      if (location.state.fileData) {
+        setFileData(location.state.fileData);
+        // Si ya tenemos los datos del archivo, confirmamos MM como unidad por defecto
+        setUnitConfirmed(true);
+      }
+    }
+  }, [location.state]);
+
   // Funciones de navegación
   const handleNext = () => {
     if (currentStep < 4) {
@@ -34,7 +52,7 @@ function Wizard({ onBack }) {
       setCurrentStep(currentStep - 1);
       setError(null);
     } else {
-      onBack();
+      navigate('/');
     }
   };
 
@@ -72,7 +90,7 @@ function Wizard({ onBack }) {
       case 3:
         return <Step3 wizardState={wizardState} onNext={handleNext} />;
       case 4:
-        return <Step4 wizardState={wizardState} onBack={onBack} />;
+        return <Step4 wizardState={wizardState} onBack={handleBack} />;
       default:
         return <Step1 wizardState={wizardState} onNext={handleNext} />;
     }
@@ -85,16 +103,16 @@ function Wizard({ onBack }) {
         <div className="wizard-logo">Corte Láser 2D</div>
         <div className="progress-bar">
           <div className={`progress-step ${currentStep >= 1 ? 'completed' : ''} ${currentStep === 1 ? 'active' : ''}`}>
-            {currentStep > 1 ? '✓' : '1'}
+            {currentStep > 1 ? <FaCheck /> : '1'}
           </div>
           <div className={`progress-step ${currentStep >= 2 ? 'completed' : ''} ${currentStep === 2 ? 'active' : ''}`}>
-            {currentStep > 2 ? '✓' : '2'}
+            {currentStep > 2 ? <FaCheck /> : '2'}
           </div>
           <div className={`progress-step ${currentStep >= 3 ? 'completed' : ''} ${currentStep === 3 ? 'active' : ''}`}>
-            {currentStep > 3 ? '✓' : '3'}
+            {currentStep > 3 ? <FaCheck /> : '3'}
           </div>
           <div className={`progress-step ${currentStep >= 4 ? 'completed' : ''} ${currentStep === 4 ? 'active' : ''}`}>
-            {currentStep > 4 ? '✓' : '4'}
+            {currentStep > 4 ? <FaCheck /> : '4'}
           </div>
         </div>
         <button className="btn-login-header">LOGIN</button>

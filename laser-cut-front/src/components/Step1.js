@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { FaCheckCircle, FaPaperclip } from 'react-icons/fa';
 import './Step.css';
 import { analizarArchivo } from '../services/api';
 
@@ -70,7 +71,7 @@ function Step1({ wizardState, onNext }) {
             <div className="upload-dropzone">
               {file ? (
                 <div className="upload-success">
-                  <div className="upload-icon">✓</div>
+                  <FaCheckCircle className="upload-icon" />
                   <p className="upload-filename">{file.name}</p>
                   <button
                     className="btn-link"
@@ -88,7 +89,7 @@ function Step1({ wizardState, onNext }) {
                 </div>
               ) : (
                 <>
-                  <div className="upload-icon">📎</div>
+                  <FaPaperclip className="upload-icon" />
                   <p className="upload-text">
                     Haz clic para seleccionar tu archivo DXF
                   </p>

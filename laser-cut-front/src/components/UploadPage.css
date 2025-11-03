@@ -1,0 +1,228 @@
+.upload-page {
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Toolbar superior */
+.landing-header {
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+  padding: 1rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.landing-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+.btn-login-header {
+  background: #2d2d2d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-login-header:hover {
+  background: #3a3a3a;
+}
+
+/* Contenedor principal */
+.landing-content-wrapper {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dropzone container */
+.dropzone-container {
+  border: 3px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 6rem 3rem;
+  text-align: center;
+  background: #ffffff;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.dropzone-container.drag-active {
+  border-color: #d32f2f;
+  background: #fef2f2;
+}
+
+/* Procesando archivo */
+.processing-container {
+  border: 3px solid #d32f2f;
+  border-radius: 8px;
+  padding: 6rem 3rem;
+  text-align: center;
+  background: #fef2f2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.processing-spinner {
+  margin-bottom: 2rem;
+}
+
+.processing-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 1rem 0;
+}
+
+.processing-message {
+  font-size: 1rem;
+  color: #718096;
+  margin: 0;
+}
+
+/* Loading spinner */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e5e5e5;
+  border-top-color: #d32f2f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error message */
+.error-message-upload {
+  background: #fee;
+  border: 2px solid #fcc;
+  color: #c53030;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Iconos de tipos de archivo */
+.file-type-icons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.file-type-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Texto principal del dropzone */
+.dropzone-main-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+/* Divisor "o" */
+.dropzone-divider {
+  font-size: 1rem;
+  color: #718096;
+  margin: 1.5rem 0;
+}
+
+/* Botón buscar archivos */
+.btn-browse-files {
+  background: #d32f2f;
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1.5rem;
+}
+
+.btn-browse-files:hover {
+  background: #b71c1c;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+/* Mensaje de seguridad */
+.security-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #718096;
+  margin-top: 1rem;
+}
+
+.security-icon {
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .landing-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .landing-logo {
+    font-size: 1.5rem;
+  }
+
+  .landing-content-wrapper {
+    padding: 2rem 1rem;
+  }
+
+  .dropzone-container,
+  .processing-container {
+    padding: 3rem 1.5rem;
+  }
+
+  .dropzone-main-text {
+    font-size: 1.25rem;
+  }
+
+  .file-type-icons {
+    gap: 1rem;
+  }
+
+  .file-type-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+

@@ -1,7 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaBolt, FaCrosshairs, FaDollarSign } from 'react-icons/fa';
 import './LandingPage.css';
 
-function LandingPage({ onStart }) {
+function LandingPage() {
+  const navigate = useNavigate();
+
+  const handleStartWizard = () => {
+    navigate('/upload');
+  };
+
   return (
     <div className="landing-page">
       <div className="landing-container">
@@ -13,23 +21,23 @@ function LandingPage({ onStart }) {
           Sube tu archivo DXF y obtén una cotización instantánea para tu proyecto personalizado
         </p>
         
-        <button className="btn-primary btn-landing" onClick={onStart}>
-          Subir Archivo
+        <button className="btn-primary btn-landing" onClick={handleStartWizard}>
+          Comenzar
         </button>
 
         <div className="features">
           <div className="feature">
-            <div className="feature-icon">⚡</div>
+            <FaBolt className="feature-icon" />
             <h3>Cotización Rápida</h3>
             <p>Resultados en segundos</p>
           </div>
           <div className="feature">
-            <div className="feature-icon">🎯</div>
+            <FaCrosshairs className="feature-icon" />
             <h3>Precisión</h3>
             <p>Cortes de alta calidad</p>
           </div>
           <div className="feature">
-            <div className="feature-icon">💰</div>
+            <FaDollarSign className="feature-icon" />
             <h3>Precios Justos</h3>
             <p>Transparencia total</p>
           </div>
@@ -40,4 +48,3 @@ function LandingPage({ onStart }) {
 }
 
 export default LandingPage;
-

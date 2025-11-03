@@ -9,8 +9,8 @@
   top: 0;
   left: 0;
   right: 0;
-  background: #2d2d2d;
-  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+  padding: 1rem 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,11 +28,11 @@
 }
 
 .btn-login-header {
-  background: #555555;
+  background: #2d2d2d;
   color: white;
   border: none;
-  padding: 0.5rem 1.5rem;
-  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
   font-weight: 600;
   border-radius: 4px;
   cursor: pointer;
@@ -40,14 +40,15 @@
 }
 
 .btn-login-header:hover {
-  background: #666666;
+  background: #3a3a3a;
 }
 
 .wizard-logo {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #ffffff;
   letter-spacing: -0.02em;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 .progress-step {

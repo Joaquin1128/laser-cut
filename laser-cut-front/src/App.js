@@ -1,29 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import LandingPage from './components/LandingPage';
+import UploadPage from './components/UploadPage';
 import Wizard from './components/Wizard';
 
 function App() {
-  const [currentView, setCurrentView] = useState('landing');
-
-  // Manejar navegación entre landing y wizard
-  const handleStartWizard = () => {
-    setCurrentView('wizard');
-  };
-
-  const handleBackToLanding = () => {
-    setCurrentView('landing');
-  };
-
   return (
-    <div className="App">
-      {currentView === 'landing' && (
-        <LandingPage onStart={handleStartWizard} />
-      )}
-      {currentView === 'wizard' && (
-        <Wizard onBack={handleBackToLanding} />
-      )}
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/upload" element={<UploadPage />} />
+          <Route path="/wizard" element={<Wizard />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
