@@ -88,13 +88,13 @@ function UploadPage() {
             </div>
             
             <div className="dropzone-main-text">
-              Arrastra hasta 10 archivos aquí para comenzar
+              Arrastra un archivo aquí para comenzar
             </div>
             
             <div className="dropzone-divider">o</div>
             
             <button className="btn-browse-files" onClick={(e) => { e.stopPropagation(); handleFileBrowse(); }}>
-              BUSCAR ARCHIVOS
+              BUSCAR ARCHIVO
             </button>
             
             <div className="security-message">
