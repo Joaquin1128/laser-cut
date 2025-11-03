@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { FaLock, FaFileUpload, FaIndustry, FaShippingFast } from 'react-icons/fa';
@@ -10,32 +10,73 @@ function UploadPage() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (isProcessing) {
+      setProgress(0);
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 90) {
+            clearInterval(interval);
+            return prev;
+          }
+          const progressFactor = 1 - (prev / 90);
+          const minIncrement = 0.5;
+          const maxIncrement = 3 * progressFactor;
+          const increment = minIncrement + Math.random() * (maxIncrement - minIncrement);
+          return Math.min(prev + increment, 90);
+        });
+      }, 100);
+
+      return () => clearInterval(interval);
+    } else {
+      setProgress(0);
+    }
+  }, [isProcessing]);
 
   const onDrop = async (acceptedFiles) => {
     if (!acceptedFiles || acceptedFiles.length === 0) return;
-
     const selectedFile = acceptedFiles[0];
-
     if (!selectedFile.name.toLowerCase().endsWith('.dxf')) {
       setError('Por favor, sube un archivo DXF válido');
       return;
     }
-
     setIsProcessing(true);
     setError(null);
-
+    setProgress(0);
+    
     try {
-      const data = await analizarArchivo(selectedFile);
+      const minProcessingTime = 3000;
+      const analysisPromise = analizarArchivo(selectedFile);
       
-      navigate('/wizard', { 
-        state: { 
-          file: selectedFile, 
-          fileData: data 
-        } 
+      const [data] = await Promise.all([
+        analysisPromise,
+        new Promise(resolve => setTimeout(resolve, minProcessingTime))
+      ]);
+      
+      const steps = 20;
+      const stepDuration = 30;
+      const startProgress = 90;
+      
+      for (let i = 1; i <= steps; i++) {
+        await new Promise(resolve => setTimeout(resolve, stepDuration));
+        const newProgress = startProgress + ((100 - startProgress) * (i / steps));
+        setProgress(newProgress);
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      navigate('/wizard', {
+        state: {
+          file: selectedFile,
+          fileData: data
+        }
       });
     } catch (err) {
       setError(err.message || 'Error al analizar el archivo');
       setIsProcessing(false);
+      setProgress(0);
     }
   };
 
@@ -71,15 +112,7 @@ function UploadPage() {
       </div>
 
       <div className="landing-content-wrapper">
-        {isProcessing ? (
-          <div className="processing-container">
-            <div className="processing-spinner">
-              <div className="spinner"></div>
-            </div>
-            <h2 className="processing-title">Procesando archivo...</h2>
-            <p className="processing-message">Estamos analizando tu archivo DXF. Esto puede tomar unos segundos.</p>
-          </div>
-        ) : (
+        {!isProcessing && (
           <div {...getRootProps()} className={`dropzone-container ${isDragActive ? 'drag-active' : ''}`}>
             <input {...getInputProps()} />
             
@@ -138,6 +171,47 @@ function UploadPage() {
           </div>
         )}
       </div>
+
+      {isProcessing && (
+        <div className="processing-modal-overlay">
+          <div className="processing-modal">
+            <div className="circular-progress-container">
+              <svg className="circular-progress" viewBox="0 0 120 120">
+                <circle
+                  className="circular-progress-background"
+                  cx="60"
+                  cy="60"
+                  r="54"
+                  fill="none"
+                  stroke="#e5e5e5"
+                  strokeWidth="8"
+                />
+                <circle
+                  className="circular-progress-foreground"
+                  cx="60"
+                  cy="60"
+                  r="54"
+                  fill="none"
+                  stroke="#d32f2f"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray={`${2 * Math.PI * 54}`}
+                  strokeDashoffset={`${2 * Math.PI * 54 * (1 - progress / 100)}`}
+                  transform="rotate(-90 60 60)"
+                  style={{ transition: 'stroke-dashoffset 0.3s ease' }}
+                />
+              </svg>
+              <div className="circular-progress-text">
+                <span className="progress-percentage">{Math.round(progress)}%</span>
+              </div>
+            </div>
+            <h2 className="processing-modal-title">Procesando archivo...</h2>
+            <p className="processing-modal-message">
+              Estamos analizando tu archivo DXF. Esto puede tomar unos segundos.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
