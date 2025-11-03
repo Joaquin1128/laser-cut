@@ -230,50 +230,14 @@
   max-width: 280px;
 }
 
-@media (max-width: 768px) {
-  .landing-header {
-    padding: 1rem 1.5rem;
-  }
-
-  .landing-logo {
-    font-size: 1.5rem;
-  }
-
-  .landing-content-wrapper {
-    padding: 2rem 1rem;
-  }
-
-  .dropzone-container,
-  .processing-container {
-    padding: 3rem 1.5rem;
-  }
-
-  .dropzone-main-text {
-    font-size: 1.25rem;
-  }
-
-  .file-type-icons {
-    gap: 1rem;
-  }
-
-  .file-type-icon {
-    width: 40px;
-    height: 40px;
-  }
-
-  .process-steps {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-}
-
 .processing-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -325,7 +289,7 @@
 }
 
 .circular-progress-foreground {
-  stroke: #d32f2f; /* ahora rojo */
+  stroke: #d32f2f;
   transition: stroke-dashoffset 0.3s ease;
   stroke-linecap: round;
 }
@@ -358,4 +322,41 @@
   color: #718096;
   margin: 0;
   line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .landing-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .landing-logo {
+    font-size: 1.5rem;
+  }
+
+  .landing-content-wrapper {
+    padding: 2rem 1rem;
+  }
+
+  .dropzone-container,
+  .processing-container {
+    padding: 3rem 1.5rem;
+  }
+
+  .dropzone-main-text {
+    font-size: 1.25rem;
+  }
+
+  .file-type-icons {
+    gap: 1rem;
+  }
+
+  .file-type-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .process-steps {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
