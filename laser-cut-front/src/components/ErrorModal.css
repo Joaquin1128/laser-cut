@@ -46,14 +46,12 @@
 .error-modal-icon {
   width: 100px;
   height: 100px;
-  margin-bottom: 1.5rem;
-  border-radius: 50%;
+  margin-bottom: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(211, 47, 47, 0.12);
   color: #d32f2f;
-  font-size: 2.5rem;
+  font-size: 4rem;
 }
 
 .error-modal-title {
