@@ -14,7 +14,6 @@ function Step4({ wizardState, onBack }) {
     setQuoteData,
     isLoading,
     setIsLoading,
-    error,
     setError,
   } = wizardState;
 
@@ -91,8 +90,6 @@ function Step4({ wizardState, onBack }) {
           <p>Calculando cotización...</p>
         </div>
       )}
-
-      {error && <div className="error-message">{error}</div>}
 
       <div className="step-actions">
         {!quoteRequested ? (

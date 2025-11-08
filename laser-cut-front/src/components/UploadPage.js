@@ -5,6 +5,7 @@ import { FaLock, FaFileUpload, FaIndustry, FaShippingFast } from 'react-icons/fa
 import './UploadPage.css';
 import dxfIcon from '../assets/icons/dxf.png';
 import { analizarArchivo } from '../services/api';
+import ErrorModal from './ErrorModal';
 
 function UploadPage() {
   const navigate = useNavigate();
@@ -144,12 +145,6 @@ function UploadPage() {
           </div>
         </div>
 
-        {error && (
-          <div className="error-message-upload">
-            {error}
-          </div>
-        )}
-
         <div className="process-steps">
           <div className="process-step">
             <FaFileUpload className="process-step-icon" />
@@ -216,6 +211,13 @@ function UploadPage() {
             </p>
           </div>
         </div>
+      )}
+
+      {error && (
+        <ErrorModal
+          message={error}
+          onClose={() => setError(null)}
+        />
       )}
     </div>
   );

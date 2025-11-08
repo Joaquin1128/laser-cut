@@ -1,0 +1,102 @@
+.error-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  animation: fadeIn 0.3s ease;
+}
+
+.error-modal {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease;
+  padding: 2rem;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.error-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: #a0a0a0;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.error-modal-close:hover {
+  color: #d32f2f;
+  transform: scale(1.1);
+}
+
+.error-modal-icon {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(211, 47, 47, 0.12);
+  color: #d32f2f;
+  font-size: 2.5rem;
+}
+
+.error-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0.5rem 0;
+}
+
+.error-modal-message {
+  font-size: 0.95rem;
+  color: #718096;
+  margin: 0 1rem 1.5rem;
+  line-height: 1.6;
+}
+
+.error-modal-action {
+  background: #d32f2f;
+  color: white;
+  border: none;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1.5rem;
+  width: auto;
+  display: inline-block;
+}
+
+.error-modal-action:hover {
+  background: #b71c1c;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+  transform: translateY(-1px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
