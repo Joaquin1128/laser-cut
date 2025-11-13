@@ -1,10 +1,15 @@
 package com.example.lasercut.laser_cut_back.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,14 +29,18 @@ public class Material {
     @Column(nullable = false)
     private double precioPorKg;
 
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Espesor> espesores = new HashSet<>();
+
     public Material() {
     }
 
-    public Material(Long id, String nombre, double densidad, double precioPorKg) {
+    public Material(Long id, String nombre, double densidad, double precioPorKg, Set<Espesor> espesores) {
         this.id = id;
         this.nombre = nombre;
         this.densidad = densidad;
         this.precioPorKg = precioPorKg;
+        this.espesores = espesores;
     }
 
     public Long getId() {
@@ -64,6 +73,14 @@ public class Material {
 
     public void setPrecioPorKg(double precioPorKg) {
         this.precioPorKg = precioPorKg;
+    }
+
+    public Set<Espesor> getEspesores() {
+        return espesores;
+    }
+
+    public void setEspesores(Set<Espesor> espesores) {
+        this.espesores = espesores;
     }
 
 }
