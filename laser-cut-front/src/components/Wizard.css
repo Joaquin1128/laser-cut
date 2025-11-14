@@ -1,7 +1,7 @@
 .wizard {
   min-height: 100vh;
   background: #fafafa;
-  padding-top: 80px;
+  padding-top: 110px;
 }
 
 .wizard-header-top {
@@ -51,6 +51,17 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
+.wizard-dimensions {
+  position: absolute;
+  bottom: -2.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f5f5f5;
+  letter-spacing: 0.04em;
+}
+
 .progress-step {
   width: 32px;
   height: 32px;
@@ -80,39 +91,27 @@
   padding: 2rem;
 }
 
-.btn-back-wizard {
-  background: transparent;
-  border: none;
-  color: #d32f2f;
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
-  transition: all 0.2s ease;
-}
-
-.btn-back-wizard:hover {
-  color: #b71c1c;
-  text-decoration: underline;
-}
-
 .wizard-content {
   display: grid;
-  grid-template-columns: 400px 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2rem;
   min-height: 500px;
+  align-items: stretch;
 }
 
 .wizard-preview {
-  background: white;
-  border-radius: 4px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 100px;
-  height: fit-content;
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
+  background: transparent;
+  border-radius: 0;
+  padding: 2.5rem;
+  box-shadow: none;
+  position: static;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
 }
 
 .wizard-step {
@@ -122,9 +121,93 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+.wizard-step-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.wizard-step-wrapper .wizard-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: flex-start;
+  margin-bottom: 0.25rem;
+}
+
+.wizard-step-wrapper .wizard-header-buttons .btn-primary,
+.wizard-step-wrapper .wizard-header-buttons .btn-secondary {
+  border-radius: 4px;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+  border: none;
+}
+
+.wizard-step-wrapper .wizard-header-buttons .btn-primary {
+  background: #d32f2f;
+  color: white;
+}
+
+.wizard-step-wrapper .wizard-header-buttons .btn-primary:hover:not(:disabled) {
+  background: #b71c1c;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+
+.wizard-step-wrapper .wizard-header-buttons .btn-secondary {
+  background: white;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+}
+
+.wizard-step-wrapper .wizard-header-buttons .btn-secondary:hover:not(:disabled) {
+  background: #fdecec;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.15);
+}
+
+.wizard-step-wrapper .wizard-header-buttons .btn-primary:disabled,
+.wizard-step-wrapper .wizard-header-buttons .btn-secondary:disabled {
+  background: #d0d0d0;
+  color: #999999;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.wizard-step-unit {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.wizard-step-unit .step {
+  background: transparent;
+  box-shadow: none;
+}
+
+.wizard-step-unit .unit-step-layout {
+  background: transparent;
+}
+
+.wizard-step-unit .step-actions {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 1.5rem;
+}
+
 @media (max-width: 1024px) {
   .wizard-content {
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 1fr;
+  }
+
+  .wizard-preview {
+    position: relative;
+    top: 0;
+    max-height: none;
+    margin-top: 1.5rem;
+    padding: 2rem;
   }
 }
 
@@ -136,8 +219,10 @@
   .wizard-preview {
     position: relative;
     top: 0;
-    max-height: 300px;
+    max-height: none;
     margin-bottom: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
   }
 
   .wizard-header {

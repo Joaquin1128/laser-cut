@@ -6,13 +6,13 @@
 
 .step-title {
   font-size: 1.8rem;
-  color: #000000;
+  color: #2d3748;
   margin: 0;
   font-weight: 500;
 }
 
 .step-description {
-  color: #666666;
+  color: #718096;
   font-size: 1rem;
   margin: 0;
 }
@@ -97,61 +97,66 @@
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
-.option-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+.unit-step-layout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.unit-selection-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.unit-description {
+  color: #718096;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.unit-dimensions-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  letter-spacing: 0.02em;
+}
+
+.unit-choice-group {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  margin: 1rem 0;
 }
 
-.option-card {
-  border: 1px solid #d0d0d0;
-  border-radius: 4px;
-  padding: 1.5rem;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-}
-
-.option-card:hover {
-  border-color: #000000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.option-card.selected {
-  border-color: #000000;
-  background: #f5f5f5;
-}
-
-.option-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.option-title {
-  font-size: 1.2rem;
-  color: #000000;
-  margin: 0.5rem 0;
-  font-weight: 500;
-}
-
-.option-description {
-  color: #666666;
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-.unit-confirmation {
-  background: white;
-  padding: 2rem;
-}
-
-.unit-title {
+.unit-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   font-size: 1rem;
+  color: #2d3748;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.unit-choice:hover span {
+  color: #d32f2f;
+}
+
+.unit-choice input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #d32f2f;
+  cursor: pointer;
+}
+
+.unit-choice span {
   font-weight: 500;
-  color: #000000;
-  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.unit-choice input[type="radio"]:checked + span {
+  color: #d32f2f;
 }
 
 .radio-group {
@@ -511,8 +516,8 @@
 }
 
 @media (max-width: 768px) {
-  .option-grid {
-    grid-template-columns: 1fr;
+  .unit-step-layout {
+    flex-direction: column;
   }
 
   .step-actions {

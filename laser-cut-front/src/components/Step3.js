@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Step.css';
 
-function Step3({ wizardState, onNext }) {
+function Step3({ wizardState, onNext, onBack, setHeaderControls }) {
   const {
     material,
     setMaterial,
@@ -25,6 +25,16 @@ function Step3({ wizardState, onNext }) {
   };
 
   const canContinue = material && thickness;
+
+  useEffect(() => {
+    setHeaderControls({
+      showBack: true,
+      showNext: true,
+      canContinue,
+      onNext,
+      onBack,
+    });
+  }, [setHeaderControls, onNext, onBack, canContinue]);
 
   return (
     <div className="step">
@@ -69,15 +79,6 @@ function Step3({ wizardState, onNext }) {
         </div>
       )}
 
-      <div className="step-actions">
-        <button
-          className="btn-primary"
-          onClick={onNext}
-          disabled={!canContinue}
-        >
-          NEXT
-        </button>
-      </div>
     </div>
   );
 }

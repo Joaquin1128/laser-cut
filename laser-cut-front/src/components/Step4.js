@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import './Step.css';
 import { calcularCotizacion } from '../services/api';
 
-function Step4({ wizardState, onBack }) {
+function Step4({ wizardState, onBack, setHeaderControls }) {
   const {
     file,
     material,
@@ -19,12 +19,20 @@ function Step4({ wizardState, onBack }) {
 
   const [quoteRequested, setQuoteRequested] = useState(false);
   const [tempQuantity, setTempQuantity] = useState(1);
+  const canRequestQuote = Boolean(
+    file &&
+    material &&
+    thickness &&
+    tempQuantity &&
+    tempQuantity > 0 &&
+    !isLoading
+  );
 
   useEffect(() => {
     setQuantity(tempQuantity);
   }, [tempQuantity, setQuantity]);
 
-  const handleGetQuote = async () => {
+  const handleGetQuote = useCallback(async () => {
     if (!file || !material || !thickness || !tempQuantity) {
       setError('Por favor, completa todos los campos');
       return;
@@ -49,7 +57,43 @@ function Step4({ wizardState, onBack }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [
+    file,
+    material,
+    thickness,
+    tempQuantity,
+    setError,
+    setIsLoading,
+    setQuoteData,
+  ]);
+
+  useEffect(() => {
+    const controls = {
+      showBack: true,
+      showNext: !quoteRequested,
+      canContinue: quoteRequested ? true : canRequestQuote,
+      isLoading,
+      onBack,
+      onNext: quoteRequested ? onBack : handleGetQuote,
+    };
+
+    if (quoteRequested) {
+      controls.backLabel = 'NUEVA COTIZACIÓN';
+    }
+
+    if (!quoteRequested) {
+      controls.nextLabel = 'GENERAR COTIZACIÓN';
+    }
+
+    setHeaderControls(controls);
+  }, [
+    setHeaderControls,
+    quoteRequested,
+    canRequestQuote,
+    isLoading,
+    onBack,
+    handleGetQuote,
+  ]);
 
   return (
     <div className="step">
@@ -91,40 +135,15 @@ function Step4({ wizardState, onBack }) {
         </div>
       )}
 
-      <div className="step-actions">
-        {!quoteRequested ? (
-          <>
-            <button
-              className="btn-secondary"
-              onClick={onBack}
-              disabled={isLoading}
-            >
-              &lt; BACK
-            </button>
-            <button
-              className="btn-primary"
-              onClick={handleGetQuote}
-              disabled={isLoading}
-            >
-              NEXT
-            </button>
-          </>
-        ) : (
-          <div className="quote-success">
-            <FaCheckCircle className="success-icon" />
-            <h4>¡Cotización generada exitosamente!</h4>
-            <p className="success-message">
-              Tu cotización se muestra en el panel de preview.
-            </p>
-            <button
-              className="btn-secondary"
-              onClick={onBack}
-            >
-              Nueva Cotización
-            </button>
-          </div>
-        )}
-      </div>
+      {quoteRequested && (
+        <div className="quote-success">
+          <FaCheckCircle className="success-icon" />
+          <h4>¡Cotización generada exitosamente!</h4>
+          <p className="success-message">
+            Tu cotización se muestra en el panel de preview.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

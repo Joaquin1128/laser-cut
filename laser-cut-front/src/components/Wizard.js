@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import './Wizard.css';
 import Preview from './Preview';
 import Step1 from './Step1';
-import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
 import ErrorModal from './ErrorModal';
+import WizardHeaderButtons from './WizardHeaderButtons';
 
 function Wizard() {
   const navigate = useNavigate();
@@ -19,12 +19,19 @@ function Wizard() {
   const [fileData, setFileData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [unitConfirmed, setUnitConfirmed] = useState(false);
-  const [cutType, setCutType] = useState('Laser');
+  const [unitConfirmed, setUnitConfirmed] = useState('MM');
   const [material, setMaterial] = useState('');
   const [thickness, setThickness] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [quoteData, setQuoteData] = useState(null);
+  const [headerControls, setHeaderControls] = useState({
+    showBack: false,
+    showNext: false,
+    canContinue: true,
+    isLoading: false,
+    onBack: null,
+    onNext: null
+  });
 
   useEffect(() => {
     if (!hasInitialized.current) {
@@ -35,7 +42,7 @@ function Wizard() {
         }
         if (location.state.fileData) {
           setFileData(location.state.fileData);
-          setUnitConfirmed(true);
+          setUnitConfirmed('MM');
         }
       } else {
         navigate('/upload', { replace: true });
@@ -70,8 +77,6 @@ function Wizard() {
     setError,
     unitConfirmed,
     setUnitConfirmed,
-    cutType,
-    setCutType,
     material,
     setMaterial,
     thickness,
@@ -82,20 +87,67 @@ function Wizard() {
     setQuoteData,
   };
 
+  const formatDimension = (value, unit) => {
+    if (!value) return '--';
+    if (unit === 'INCH') {
+      return (value / 25.4).toFixed(2);
+    }
+    return value.toFixed(0);
+  };
+
+  const dimensionLabel = fileData
+    ? `${formatDimension(fileData.ancho, unitConfirmed)} × ${formatDimension(fileData.alto, unitConfirmed)} ${unitConfirmed === 'INCH' ? 'in' : 'mm'}`
+    : null;
+
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <Step1 wizardState={wizardState} onNext={handleNext} />;
+        return (
+          <Step1
+            wizardState={wizardState}
+            onNext={handleNext}
+            onBack={handleBack}
+            setHeaderControls={setHeaderControls}
+          />
+        );
       case 2:
-        return <Step2 wizardState={wizardState} onNext={handleNext} />;
+        return (
+          <Step3
+            wizardState={wizardState}
+            onNext={handleNext}
+            onBack={handleBack}
+            setHeaderControls={setHeaderControls}
+          />
+        );
       case 3:
-        return <Step3 wizardState={wizardState} onNext={handleNext} />;
-      case 4:
-        return <Step4 wizardState={wizardState} onBack={handleBack} />;
+        return (
+          <Step4
+            wizardState={wizardState}
+            onBack={handleBack}
+            setHeaderControls={setHeaderControls}
+          />
+        );
       default:
         return <Step1 wizardState={wizardState} onNext={handleNext} />;
     }
   };
+
+  const headerButtonProps = useMemo(
+    () => ({
+      showBack: headerControls.showBack,
+      backLabel: headerControls.backLabel,
+      showNext: headerControls.showNext,
+      nextLabel: headerControls.nextLabel,
+      canContinue:
+        headerControls.canContinue !== undefined
+          ? headerControls.canContinue
+          : true,
+      isLoading: headerControls.isLoading || false,
+      onBack: headerControls.onBack || handleBack,
+      onNext: headerControls.onNext || handleNext,
+    }),
+    [headerControls, handleBack, handleNext]
+  );
 
   return (
     <div className="wizard">
@@ -111,25 +163,24 @@ function Wizard() {
           <div className={`progress-step ${currentStep >= 3 ? 'completed' : ''} ${currentStep === 3 ? 'active' : ''}`}>
             {currentStep > 3 ? <FaCheck /> : '3'}
           </div>
-          <div className={`progress-step ${currentStep >= 4 ? 'completed' : ''} ${currentStep === 4 ? 'active' : ''}`}>
-            {currentStep > 4 ? <FaCheck /> : '4'}
-          </div>
         </div>
         <button className="btn-login-header">LOGIN</button>
+        {dimensionLabel && (
+          <div className="wizard-dimensions">{dimensionLabel}</div>
+        )}
       </div>
 
       <div className="wizard-container">
-        <button className="btn-back-wizard" onClick={handleBack}>
-          ← Volver
-        </button>
-
         <div className="wizard-content">
-          <div className="wizard-preview">
-            <Preview fileData={fileData} quoteData={quoteData} />
+          <div className="wizard-step-wrapper">
+            <WizardHeaderButtons {...headerButtonProps} />
+            <div className={`wizard-step ${currentStep === 1 ? 'wizard-step-unit' : ''}`}>
+              {renderStep()}
+            </div>
           </div>
 
-          <div className="wizard-step">
-            {renderStep()}
+          <div className="wizard-preview">
+            <Preview fileData={fileData} quoteData={quoteData} />
           </div>
         </div>
       </div>

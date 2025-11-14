@@ -54,7 +54,6 @@ function Preview({ fileData, quoteData }) {
 
     return (
       <div className="preview">
-        <h3 className="preview-title">Preview</h3>
         <div className="preview-content">
           {decodedSvg ? (
             <div className="preview-image-container">
@@ -66,23 +65,9 @@ function Preview({ fileData, quoteData }) {
           ) : (
             <div className="preview-placeholder">
               <div className="preview-icon">📄</div>
-              <p>{fileData.nombre}</p>
+              <p>Subí un archivo compatible para ver la vista previa.</p>
             </div>
           )}
-          <div className="preview-info">
-            <div className="info-item">
-              <span className="info-label">Archivo:</span>
-              <span className="info-value">{fileData.nombre}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Ancho:</span>
-              <span className="info-value">{fileData.ancho.toFixed(0)} mm</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">Alto:</span>
-              <span className="info-value">{fileData.alto.toFixed(0)} mm</span>
-            </div>
-          </div>
         </div>
       </div>
     );
