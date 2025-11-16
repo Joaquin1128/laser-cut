@@ -352,7 +352,6 @@
   outline: none;
 }
 
-/* remove native number spinners */
 .quantity-input::-webkit-outer-spin-button,
 .quantity-input::-webkit-inner-spin-button {
   -webkit-appearance: none;

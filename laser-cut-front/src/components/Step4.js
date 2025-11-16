@@ -83,7 +83,8 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
 
   return (
     <div className="step">
-      <h3 className="step-title">Confirmación</h3>
+      <h3 className="step-title">Confirmá tu información</h3>
+      <p className="step-description">Revisá que todo esté correcto antes de generar la cotización.</p>
 
       <div className="summary-card">
         <div className="summary-row">

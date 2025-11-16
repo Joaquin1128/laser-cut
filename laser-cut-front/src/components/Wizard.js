@@ -291,7 +291,7 @@ function Wizard() {
         <div className="wizard-content">
           <div className="wizard-step-wrapper">
             <WizardButtons {...headerButtonProps} />
-            <div className={`wizard-step ${currentStep === 1 ? 'wizard-step-unit' : ''} ${currentStep === 2 ? 'wizard-step-material' : ''} ${currentStep === 3 ? 'wizard-step-material' : ''}`}>
+            <div className={`wizard-step ${currentStep === 1 ? 'wizard-step-unit' : ''} ${currentStep === 2 ? 'wizard-step-material' : ''} ${currentStep === 3 ? 'wizard-step-material' : ''} ${currentStep === 4 ? 'wizard-step-material' : ''}`}>
               {renderStep()}
             </div>
           </div>
