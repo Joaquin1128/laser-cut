@@ -11,7 +11,7 @@
 }
 
 .error-modal {
-  background: #ffffff;
+  background: var(--color-bg);
   border-radius: 12px;
   width: 400px;
   height: 400px;
@@ -39,7 +39,7 @@
   transition: color 0.2s ease, transform 0.2s ease;
 }
 .error-modal-close:hover {
-  color: #d32f2f;
+  color: var(--color-primary);
   transform: scale(1.1);
 }
 
@@ -50,27 +50,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d32f2f;
+  color: var(--color-primary);
   font-size: 4rem;
 }
 
 .error-modal-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--color-heading);
   margin: 0.5rem 0;
 }
 
 .error-modal-message {
   font-size: 0.95rem;
-  color: #718096;
+  color: var(--color-text-muted-2);
   margin: 0 1rem 1.5rem;
   line-height: 1.6;
 }
 
 .error-modal-action {
-  background: #d32f2f;
-  color: white;
+  background: var(--color-primary);
+  color: #ffffff;
   border: none;
   padding: 1rem;
   font-size: 1rem;
@@ -84,7 +84,7 @@
 }
 
 .error-modal-action:hover {
-  background: #b71c1c;
+  background: var(--color-primary-dark);
   box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
   transform: translateY(-1px);
 }

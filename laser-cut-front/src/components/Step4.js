@@ -1,55 +1,56 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import './Step.css';
+import { FaCheckCircle } from 'react-icons/fa';
 import { calcularCotizacion } from '../services/api';
 
 function Step4({ wizardState, onBack, setHeaderControls }) {
   const {
     file,
+    fileData,
+    unitConfirmed,
     material,
     thickness,
     quantity,
-    setQuantity,
-    fileData,
-    setQuoteData,
     isLoading,
     setIsLoading,
     setError,
+    setQuoteData,
   } = wizardState;
 
   const [quoteRequested, setQuoteRequested] = useState(false);
-  const [tempQuantity, setTempQuantity] = useState(1);
-  const canRequestQuote = Boolean(
-    file &&
-    material &&
-    thickness &&
-    tempQuantity &&
-    tempQuantity > 0 &&
-    !isLoading
+
+  const canGenerate = Boolean(
+    file && fileData && unitConfirmed && material && thickness && quantity > 0 && !isLoading
   );
 
-  useEffect(() => {
-    setQuantity(tempQuantity);
-  }, [tempQuantity, setQuantity]);
+  const formatDimensionValue = useCallback((value) => {
+    if (value === null || value === undefined) return '--';
+    const numeric = Number(value);
+    if (Number.isNaN(numeric)) return '--';
+    return numeric.toFixed(3).replace(/\.?0+$/, '');
+  }, []);
 
-  const handleGetQuote = useCallback(async () => {
-    if (!file || !material || !thickness || !tempQuantity) {
-      setError('Por favor, completa todos los campos');
-      return;
-    }
+  const dimensionsText = useMemo(() => {
+    if (!fileData || !unitConfirmed) return '--';
+    const ancho = formatDimensionValue(fileData.ancho);
+    const alto = formatDimensionValue(fileData.alto);
+    return unitConfirmed === 'INCH'
+      ? `${ancho}" × ${alto}"`
+      : `${ancho} × ${alto} mm`;
+  }, [fileData, unitConfirmed, formatDimensionValue]);
 
+  const handleGenerate = useCallback(async () => {
+    if (!canGenerate) return;
     setIsLoading(true);
     setError(null);
-
     try {
       const data = await calcularCotizacion({
         archivo: file,
         material,
         espesor: parseFloat(thickness),
-        cantidad: parseInt(tempQuantity),
-        unidad: 'MM',
+        cantidad: parseInt(quantity),
+        unidad: unitConfirmed === 'INCH' ? 'INCH' : 'MM',
       });
-
       setQuoteData(data);
       setQuoteRequested(true);
     } catch (err) {
@@ -57,81 +58,57 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
     } finally {
       setIsLoading(false);
     }
-  }, [
-    file,
-    material,
-    thickness,
-    tempQuantity,
-    setError,
-    setIsLoading,
-    setQuoteData,
-  ]);
+  }, [canGenerate, setIsLoading, setError, file, material, thickness, quantity, unitConfirmed, setQuoteData]);
 
   useEffect(() => {
     const controls = {
       showBack: true,
-      showNext: !quoteRequested,
-      canContinue: quoteRequested ? true : canRequestQuote,
-      isLoading,
       onBack,
-      onNext: quoteRequested ? onBack : handleGetQuote,
     };
 
-    if (quoteRequested) {
+    if (!quoteRequested) {
+      controls.showNext = true;
+      controls.nextLabel = 'GENERAR COTIZACIÓN';
+      controls.canContinue = canGenerate;
+      controls.isLoading = isLoading;
+      controls.onNext = handleGenerate;
+    } else {
+      controls.showNext = false;
       controls.backLabel = 'NUEVA COTIZACIÓN';
     }
 
-    if (!quoteRequested) {
-      controls.nextLabel = 'GENERAR COTIZACIÓN';
-    }
-
     setHeaderControls(controls);
-  }, [
-    setHeaderControls,
-    quoteRequested,
-    canRequestQuote,
-    isLoading,
-    onBack,
-    handleGetQuote,
-  ]);
+  }, [setHeaderControls, quoteRequested, canGenerate, isLoading, onBack, handleGenerate]);
 
   return (
     <div className="step">
-      <h3 className="step-title">Cantidad</h3>
+      <h3 className="step-title">Confirmación</h3>
 
-      <div className="quantity-selector">
-        <label className="form-label">Cantidad</label>
-        <div className="quantity-controls">
-          <button
-            className="quantity-btn"
-            onClick={() => setTempQuantity(Math.max(1, tempQuantity - 1))}
-            disabled={tempQuantity <= 1}
-          >
-            −
-          </button>
-          <input
-            type="number"
-            min="1"
-            value={tempQuantity}
-            onChange={(e) => {
-              const val = parseInt(e.target.value) || 1;
-              setTempQuantity(Math.max(1, val));
-            }}
-            className="quantity-input"
-          />
-          <button
-            className="quantity-btn"
-            onClick={() => setTempQuantity(tempQuantity + 1)}
-          >
-            +
-          </button>
+      <div className="summary-card">
+        <div className="summary-row">
+          <span className="summary-label">Archivo</span>
+          <span className="summary-value">{file ? (file.name || 'Cargado') : '--'}</span>
+        </div>
+        <div className="summary-row">
+          <span className="summary-label">Unidades y dimensiones</span>
+          <span className="summary-value">{dimensionsText}</span>
+        </div>
+        <div className="summary-row">
+          <span className="summary-label">Material</span>
+          <span className="summary-value">
+            {material ? `${material} (${thickness} mm)` : '--'}
+          </span>
+        </div>
+        <div className="summary-row">
+          <span className="summary-label">Cantidad</span>
+          <span className="summary-value">{quantity || '--'}</span>
         </div>
       </div>
 
       {isLoading && (
         <div className="loading">
           <div className="spinner"></div>
-          <p>Calculando cotización...</p>
+          <p>Generando cotización...</p>
         </div>
       )}
 
@@ -139,9 +116,7 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
         <div className="quote-success">
           <FaCheckCircle className="success-icon" />
           <h4>¡Cotización generada exitosamente!</h4>
-          <p className="success-message">
-            Tu cotización se muestra en el panel de preview.
-          </p>
+          <p className="success-message">La cotización se muestra en el panel de preview.</p>
         </div>
       )}
     </div>

@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import './Wizard.css';
 import Preview from './Preview';
 import Step1 from './Step1';
+import Step2 from './Step2';
 import Step3 from './Step3';
 import Step4 from './Step4';
 import ErrorModal from './ErrorModal';
-import WizardHeaderButtons from './WizardHeaderButtons';
+import WizardButtons from './WizardButtons';
 
 function Wizard() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ function Wizard() {
   const [fileData, setFileData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [unitConfirmed, setUnitConfirmed] = useState('MM');
+  const [unitConfirmed, setUnitConfirmed] = useState(null);
   const [material, setMaterial] = useState('');
   const [thickness, setThickness] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -42,7 +43,6 @@ function Wizard() {
         }
         if (location.state.fileData) {
           setFileData(location.state.fileData);
-          setUnitConfirmed('MM');
         }
       } else {
         navigate('/upload', { replace: true });
@@ -50,21 +50,26 @@ function Wizard() {
     }
   }, [location.state, navigate]);
 
-  const handleNext = () => {
-    if (currentStep < 4) {
-      setCurrentStep(currentStep + 1);
-      setError(null);
-    }
-  };
+  const handleNext = useCallback(() => {
+    setCurrentStep((prev) => {
+      if (prev < 4) {
+        setError(null);
+        return prev + 1;
+      }
+      return prev;
+    });
+  }, []);
 
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-      setError(null);
-    } else {
+  const handleBack = useCallback(() => {
+    setCurrentStep((prev) => {
+      if (prev > 1) {
+        setError(null);
+        return prev - 1;
+      }
       navigate('/');
-    }
-  };
+      return prev;
+    });
+  }, [navigate]);
 
   const wizardState = {
     file,
@@ -112,7 +117,7 @@ function Wizard() {
         );
       case 2:
         return (
-          <Step3
+          <Step2
             wizardState={wizardState}
             onNext={handleNext}
             onBack={handleBack}
@@ -120,6 +125,15 @@ function Wizard() {
           />
         );
       case 3:
+        return (
+          <Step3
+            wizardState={wizardState}
+            onNext={handleNext}
+            onBack={handleBack}
+            setHeaderControls={setHeaderControls}
+          />
+        );
+      case 4:
         return (
           <Step4
             wizardState={wizardState}
@@ -131,6 +145,42 @@ function Wizard() {
         return <Step1 wizardState={wizardState} onNext={handleNext} />;
     }
   };
+
+  const stepSummaries = useMemo(() => {
+    const formatDimensionValue = (value) => {
+      if (value === null || value === undefined) {
+        return null;
+      }
+      const numeric = Number(value);
+      if (Number.isNaN(numeric)) {
+        return null;
+      }
+
+      return numeric.toFixed(3).replace(/\.?0+$/, '');
+    };
+
+    const unitText = (() => {
+      if (!unitConfirmed || !fileData) return null;
+      const ancho = formatDimensionValue(fileData.ancho);
+      const alto = formatDimensionValue(fileData.alto);
+      if (!ancho || !alto) return null;
+      return unitConfirmed === 'INCH'
+        ? `${ancho}" × ${alto}"`
+        : `${ancho} × ${alto} mm`;
+    })();
+
+    const materialText = (() => {
+      if (!material || !thickness) return null;
+      return `${material} (${thickness} mm)`;
+    })();
+
+    const quantityText = (() => {
+      if (!quantity) return null;
+      return `Cantidad: ${quantity}`;
+    })();
+
+    return [unitText, materialText, quantityText, null];
+  }, [unitConfirmed, fileData, material, thickness, quantity]);
 
   const headerButtonProps = useMemo(
     () => ({
@@ -153,16 +203,33 @@ function Wizard() {
     <div className="wizard">
       <div className="wizard-header-top">
         <div className="wizard-logo">Corte Láser 2D</div>
-        <div className="progress-bar">
-          <div className={`progress-step ${currentStep >= 1 ? 'completed' : ''} ${currentStep === 1 ? 'active' : ''}`}>
-            {currentStep > 1 ? <FaCheck /> : '1'}
-          </div>
-          <div className={`progress-step ${currentStep >= 2 ? 'completed' : ''} ${currentStep === 2 ? 'active' : ''}`}>
-            {currentStep > 2 ? <FaCheck /> : '2'}
-          </div>
-          <div className={`progress-step ${currentStep >= 3 ? 'completed' : ''} ${currentStep === 3 ? 'active' : ''}`}>
-            {currentStep > 3 ? <FaCheck /> : '3'}
-          </div>
+        <div className="progress-bar progress-bar-desktop">
+          {['Unidades', 'Material', 'Cantidad', 'Confirmación'].map((label, index) => {
+            const stepNumber = index + 1;
+            const isActive = currentStep === stepNumber;
+            const isCompleted = currentStep > stepNumber;
+            const summary = stepSummaries[index];
+            const wrapperClass = [
+              'progress-step-wrapper',
+              isActive ? 'active' : '',
+              isCompleted ? 'completed' : '',
+            ]
+              .filter(Boolean)
+              .join(' ');
+
+            return (
+              <div key={label} className={wrapperClass}>
+                <div className={`progress-step-circle ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}>
+                  <span>{stepNumber}</span>
+                </div>
+                <div className="progress-step-label">
+                  <span className={`progress-step-text ${summary ? 'filled' : ''}`}>
+                    {summary || label}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
         <button className="btn-login-header">LOGIN</button>
         {dimensionLabel && (
@@ -171,9 +238,39 @@ function Wizard() {
       </div>
 
       <div className="wizard-container">
+        <div className="progress-bar progress-bar-mobile">
+          {['Unidades', 'Material', 'Cantidad', 'Confirmación'].map((label, index) => {
+            const stepNumber = index + 1;
+            const isActive = currentStep === stepNumber;
+            const isCompleted = currentStep > stepNumber;
+            const summary = stepSummaries[index];
+            const wrapperClass = [
+              'progress-step-wrapper',
+              'progress-step-wrapper-mobile',
+              isActive ? 'active' : '',
+              isCompleted ? 'completed' : '',
+            ]
+              .filter(Boolean)
+              .join(' ');
+
+            return (
+              <div key={`mobile-${label}`} className={wrapperClass}>
+                <div className={`progress-step-circle ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}`}>
+                  <span>{stepNumber}</span>
+                </div>
+                <div className="progress-step-label">
+                  <span className={`progress-step-text ${summary ? 'filled' : ''}`}>
+                    {summary || label}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
         <div className="wizard-content">
           <div className="wizard-step-wrapper">
-            <WizardHeaderButtons {...headerButtonProps} />
+            <WizardButtons {...headerButtonProps} />
             <div className={`wizard-step ${currentStep === 1 ? 'wizard-step-unit' : ''}`}>
               {renderStep()}
             </div>

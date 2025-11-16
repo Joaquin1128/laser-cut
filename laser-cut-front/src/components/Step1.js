@@ -11,7 +11,7 @@ function Step1({ wizardState, onNext, onBack, setHeaderControls }) {
 
   const canContinue = Boolean(file && fileData && unitConfirmed);
 
-  const selectedUnit = unitConfirmed || 'MM';
+  const selectedUnit = unitConfirmed;
 
   const formatDimensionValue = (value) => {
     if (value === null || value === undefined) {
@@ -28,9 +28,15 @@ function Step1({ wizardState, onNext, onBack, setHeaderControls }) {
   const anchoFormatted = formatDimensionValue(fileData?.ancho);
   const altoFormatted = formatDimensionValue(fileData?.alto);
 
-  const dimensionLabel = selectedUnit === 'INCH'
-    ? `${anchoFormatted}" × ${altoFormatted}"`
-    : `${anchoFormatted} × ${altoFormatted} mm`;
+  const dimensionLabel = (() => {
+    if (!selectedUnit || !fileData) {
+      return 'Confirmá las unidades de tu archivo para continuar.';
+    }
+    if (selectedUnit === 'INCH') {
+      return `${anchoFormatted}" × ${altoFormatted}"`;
+    }
+    return `${anchoFormatted} × ${altoFormatted} mm`;
+  })();
 
   const handleUnitChange = (unit) => {
     setUnitConfirmed(unit);

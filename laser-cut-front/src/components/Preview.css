@@ -7,7 +7,7 @@
 
 .preview-title {
   font-size: 1.2rem;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 1rem;
   font-weight: 500;
 }
@@ -70,7 +70,7 @@
 }
 
 .preview-placeholder p {
-  color: #666666;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   margin: 0;
   text-align: center;
@@ -90,7 +90,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .info-item:last-child {
@@ -98,12 +98,12 @@
 }
 
 .info-label {
-  color: #666666;
+  color: var(--color-text-muted);
   font-size: 0.9rem;
 }
 
 .info-value {
-  color: #000000;
+  color: var(--color-text);
   font-weight: 500;
   font-size: 0.9rem;
 }
@@ -118,7 +118,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .quote-item:last-child {
@@ -126,26 +126,26 @@
 }
 
 .quote-label {
-  color: #666666;
+  color: var(--color-text-muted);
   font-size: 0.95rem;
 }
 
 .quote-value {
-  color: #000000;
+  color: var(--color-text);
   font-weight: 500;
   font-size: 0.95rem;
 }
 
 .quote-divider {
   margin: 0.5rem 0;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--color-border);
 }
 
 .quote-total {
   font-size: 1.1rem;
   padding-top: 1rem;
   margin-top: 0.5rem;
-  border-top: 1px solid #000000;
+  border-top: 1px solid var(--color-text);
 }
 
 .quote-total .quote-label,
@@ -154,6 +154,6 @@
 }
 
 .highlight {
-  color: #000000 !important;
+  color: var(--color-text) !important;
   font-size: 1.4rem !important;
 }
