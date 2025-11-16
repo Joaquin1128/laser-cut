@@ -1,6 +1,6 @@
 .landing-page {
-  min-height: 100vh;
   background: var(--color-bg);
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,8 +8,8 @@
 }
 
 .landing-container {
-  max-width: 900px;
   text-align: center;
+  max-width: 900px;
   color: #1a1a1a;
 }
 

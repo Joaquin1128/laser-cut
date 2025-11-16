@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaCheck } from 'react-icons/fa';
 import './Wizard.css';
 import Preview from './Preview';
 import Step1 from './Step1';
@@ -9,6 +8,7 @@ import Step3 from './Step3';
 import Step4 from './Step4';
 import ErrorModal from './ErrorModal';
 import WizardButtons from './WizardButtons';
+import Header from './Header';
 
 function Wizard() {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ function Wizard() {
   const [unitConfirmed, setUnitConfirmed] = useState(null);
   const [material, setMaterial] = useState('');
   const [thickness, setThickness] = useState('');
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(null);
   const [quoteData, setQuoteData] = useState(null);
   const [headerControls, setHeaderControls] = useState({
     showBack: false,
@@ -64,6 +64,18 @@ function Wizard() {
     setCurrentStep((prev) => {
       if (prev > 1) {
         setError(null);
+        if (prev === 4) {
+          setQuoteData(null);
+          setIsLoading(false);
+        } else if (prev === 3) {
+          setQuantity(null);
+          setQuoteData(null);
+        } else if (prev === 2) {
+          setMaterial('');
+          setThickness('');
+          setQuantity(null);
+          setQuoteData(null);
+        }
         return prev - 1;
       }
       navigate('/');
@@ -201,8 +213,7 @@ function Wizard() {
 
   return (
     <div className="wizard">
-      <div className="wizard-header-top">
-        <div className="wizard-logo">Corte Láser 2D</div>
+      <Header>
         <div className="progress-bar progress-bar-desktop">
           {['Unidades', 'Material', 'Cantidad', 'Confirmación'].map((label, index) => {
             const stepNumber = index + 1;
@@ -223,7 +234,10 @@ function Wizard() {
                   <span>{stepNumber}</span>
                 </div>
                 <div className="progress-step-label">
-                  <span className={`progress-step-text ${summary ? 'filled' : ''}`}>
+                  <span
+                    className={`progress-step-text ${summary ? 'filled' : ''}`}
+                    title={summary || label}
+                  >
                     {summary || label}
                   </span>
                 </div>
@@ -231,11 +245,10 @@ function Wizard() {
             );
           })}
         </div>
-        <button className="btn-login-header">LOGIN</button>
         {dimensionLabel && (
           <div className="wizard-dimensions">{dimensionLabel}</div>
         )}
-      </div>
+      </Header>
 
       <div className="wizard-container">
         <div className="progress-bar progress-bar-mobile">
@@ -259,7 +272,10 @@ function Wizard() {
                   <span>{stepNumber}</span>
                 </div>
                 <div className="progress-step-label">
-                  <span className={`progress-step-text ${summary ? 'filled' : ''}`}>
+                  <span
+                    className={`progress-step-text ${summary ? 'filled' : ''}`}
+                    title={summary || label}
+                  >
                     {summary || label}
                   </span>
                 </div>
@@ -271,7 +287,7 @@ function Wizard() {
         <div className="wizard-content">
           <div className="wizard-step-wrapper">
             <WizardButtons {...headerButtonProps} />
-            <div className={`wizard-step ${currentStep === 1 ? 'wizard-step-unit' : ''}`}>
+            <div className={`wizard-step ${currentStep === 1 ? 'wizard-step-unit' : ''} ${currentStep === 2 ? 'wizard-step-material' : ''}`}>
               {renderStep()}
             </div>
           </div>

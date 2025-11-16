@@ -1,5 +1,24 @@
 const API_BASE_URL = 'http://localhost:8080/api';
 
+export async function getCatalogo() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/catalogo`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.message || `Error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al cargar catálogo:', error);
+    throw error;
+  }
+}
+
 export async function analizarArchivo(file) {
   try {
     const formData = new FormData();

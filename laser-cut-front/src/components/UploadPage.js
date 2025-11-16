@@ -6,6 +6,7 @@ import './UploadPage.css';
 import dxfIcon from '../assets/icons/dxf.png';
 import { analizarArchivo } from '../services/api';
 import ErrorModal from './ErrorModal';
+import Header from './Header';
 
 function UploadPage() {
   const navigate = useNavigate();
@@ -105,12 +106,7 @@ function UploadPage() {
 
   return (
     <div className="upload-page">
-      <div className="landing-header">
-        <div className="landing-logo">Corte Láser 2D</div>
-        <button className="btn-login-header" onClick={() => {}}>
-          LOGIN
-        </button>
-      </div>
+      <Header containerClass="landing-header" logoClass="landing-logo" />
 
       <div className="landing-content-wrapper">
         <div {...getRootProps()} className={`dropzone-container ${isDragActive ? 'drag-active' : ''} ${isProcessing ? 'disabled' : ''}`}>
