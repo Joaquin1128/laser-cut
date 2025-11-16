@@ -166,7 +166,7 @@
 .category-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
   max-height: 420px;
   overflow-y: auto;
   padding-right: 4px;
@@ -176,8 +176,9 @@
 .category-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1.5rem;
+  gap: 0;
+  padding: 0 1rem;
+  padding-left: 0;
   border: 2px solid var(--color-border);
   border-radius: 4px;
   background: var(--color-bg);
@@ -185,6 +186,9 @@
   transition: all 0.2s ease;
   text-align: left;
   width: 100%;
+  height: 76px;
+  min-height: 76px;
+  overflow: hidden;
 }
 
 .category-card:hover {
@@ -197,11 +201,28 @@
 }
 
 .category-icon {
-  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+}
+
+.category-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .category-info {
   flex: 1;
+  padding-left: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .category-title {
@@ -245,16 +266,27 @@
   gap: 0.75rem;
   cursor: pointer;
   font-size: 1rem;
+  font-family: inherit;
+  font-weight: 400;
   color: var(--color-text);
   padding: 1rem;
   border: 2px solid var(--color-border);
   border-radius: 4px;
   transition: all 0.2s ease;
+  background: var(--color-bg);
+  width: 100%;
+  text-align: left;
+  appearance: none;
+  outline: none;
 }
 
 .thickness-option:hover {
   border-color: var(--color-border-strong);
   background: var(--color-surface);
+}
+
+.thickness-option span {
+  font-weight: 500;
 }
 
 .thickness-option input[type="radio"] {
@@ -273,28 +305,30 @@
 }
 
 .quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  max-width: 200px;
+  display: inline-flex;
+  align-items: stretch;
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 240px;
 }
 
 .quantity-btn {
-  width: 40px;
-  height: 40px;
-  border: 2px solid var(--color-border);
+  width: 44px;
+  height: 44px;
+  border: none;
   background: var(--color-bg);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: background 0.15s ease, color 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
 }
 
 .quantity-btn:hover:not(:disabled) {
-  border-color: var(--color-primary);
+  background: var(--color-surface);
   color: var(--color-primary);
 }
 
@@ -304,18 +338,28 @@
 }
 
 .quantity-input {
-  flex: 1;
-  padding: 0.75rem;
-  border: 2px solid var(--color-border);
-  border-radius: 4px;
+  width: 96px;
+  padding: 0 0.5rem;
+  border: none;
   text-align: center;
   font-size: 1rem;
   font-weight: 600;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 .quantity-input:focus {
   outline: none;
-  border-color: var(--color-primary);
+}
+
+/* remove native number spinners */
+.quantity-input::-webkit-outer-spin-button,
+.quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.quantity-input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .checkbox-label {

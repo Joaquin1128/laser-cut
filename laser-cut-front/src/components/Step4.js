@@ -10,6 +10,7 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
     unitConfirmed,
     material,
     thickness,
+    finish,
     quantity,
     isLoading,
     setIsLoading,
@@ -96,7 +97,7 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
         <div className="summary-row">
           <span className="summary-label">Material</span>
           <span className="summary-value">
-            {material ? `${material} (${thickness} mm)` : '--'}
+            {material ? `${material} (${thickness} mm${finish ? `, ${finish}` : ''})` : '--'}
           </span>
         </div>
         <div className="summary-row">

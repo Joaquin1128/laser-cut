@@ -23,6 +23,7 @@ function Wizard() {
   const [unitConfirmed, setUnitConfirmed] = useState(null);
   const [material, setMaterial] = useState('');
   const [thickness, setThickness] = useState('');
+  const [finish, setFinish] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [quoteData, setQuoteData] = useState(null);
   const [headerControls, setHeaderControls] = useState({
@@ -73,6 +74,7 @@ function Wizard() {
         } else if (prev === 2) {
           setMaterial('');
           setThickness('');
+          setFinish(null);
           setQuantity(null);
           setQuoteData(null);
         }
@@ -98,6 +100,8 @@ function Wizard() {
     setMaterial,
     thickness,
     setThickness,
+    finish,
+    setFinish,
     quantity,
     setQuantity,
     quoteData,
@@ -183,7 +187,7 @@ function Wizard() {
 
     const materialText = (() => {
       if (!material || !thickness) return null;
-      return `${material} (${thickness} mm)`;
+      return `${material} (${thickness} mm${finish ? `, ${finish}` : ''})`;
     })();
 
     const quantityText = (() => {
@@ -192,7 +196,7 @@ function Wizard() {
     })();
 
     return [unitText, materialText, quantityText, null];
-  }, [unitConfirmed, fileData, material, thickness, quantity]);
+  }, [unitConfirmed, fileData, material, thickness, finish, quantity]);
 
   const headerButtonProps = useMemo(
     () => ({
@@ -287,7 +291,7 @@ function Wizard() {
         <div className="wizard-content">
           <div className="wizard-step-wrapper">
             <WizardButtons {...headerButtonProps} />
-            <div className={`wizard-step ${currentStep === 1 ? 'wizard-step-unit' : ''} ${currentStep === 2 ? 'wizard-step-material' : ''}`}>
+            <div className={`wizard-step ${currentStep === 1 ? 'wizard-step-unit' : ''} ${currentStep === 2 ? 'wizard-step-material' : ''} ${currentStep === 3 ? 'wizard-step-material' : ''}`}>
               {renderStep()}
             </div>
           </div>
