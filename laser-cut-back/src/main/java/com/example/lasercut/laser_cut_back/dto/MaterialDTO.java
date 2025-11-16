@@ -6,6 +6,7 @@ public class MaterialDTO {
     
     private Long id;
     private String nombre;
+    private String tipo;
     private Double densidad;
     private Double precioPorKg;
     private List<EspesorDTO> espesores;
@@ -24,6 +25,14 @@ public class MaterialDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public Double getDensidad() {

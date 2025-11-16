@@ -32,6 +32,7 @@ public class CatalogoService {
         MaterialDTO dto = new MaterialDTO();
         dto.setId(material.getId());
         dto.setNombre(material.getNombre());
+        dto.setTipo(material.getTipo());
         dto.setDensidad(material.getDensidad());
         dto.setPrecioPorKg(material.getPrecioPorKg());
 

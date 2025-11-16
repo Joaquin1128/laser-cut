@@ -23,6 +23,9 @@ public class Material {
     @Column(nullable = false, unique = true)
     private String nombre;
 
+    @Column(nullable = false, unique = true)
+    private String tipo;
+
     @Column(nullable = false)
     private double densidad;
 
@@ -57,6 +60,14 @@ public class Material {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public double getDensidad() {
