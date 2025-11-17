@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Step.css';
-import { FaCheckCircle } from 'react-icons/fa';
 import { calcularCotizacion } from '../services/api';
+import { simulateProcessingWithProgress } from '../utils/processingSimulator';
+import ProcessingModal from './ProcessingModal';
 
 function Step4({ wizardState, onBack, setHeaderControls }) {
+  const navigate = useNavigate();
   const {
     file,
     fileData,
@@ -16,9 +19,10 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
     setIsLoading,
     setError,
     setQuoteData,
+    quoteData,
   } = wizardState;
 
-  const [quoteRequested, setQuoteRequested] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const canGenerate = Boolean(
     file && fileData && unitConfirmed && material && thickness && quantity > 0 && !isLoading
@@ -44,16 +48,34 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
     if (!canGenerate) return;
     setIsLoading(true);
     setError(null);
+    
     try {
-      const data = await calcularCotizacion({
+      const apiPromise = calcularCotizacion({
         archivo: file,
         material,
         espesor: parseFloat(thickness),
         cantidad: parseInt(quantity),
         unidad: unitConfirmed === 'INCH' ? 'INCH' : 'MM',
       });
+      
+      const data = await simulateProcessingWithProgress(apiPromise, setProgress, {
+        minProcessingTime: 2000,
+      });
+      
       setQuoteData(data);
-      setQuoteRequested(true);
+      
+      // Navegar a la página de cotización con todos los datos
+      navigate('/quote', {
+        state: {
+          quoteData: data,
+          fileData,
+          file,
+          material,
+          thickness,
+          finish,
+          quantity,
+        }
+      });
     } catch (err) {
       setError(err.message || 'Error al calcular la cotización');
     } finally {
@@ -65,21 +87,15 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
     const controls = {
       showBack: true,
       onBack,
+      showNext: true,
+      nextLabel: 'GENERAR COTIZACIÓN',
+      canContinue: canGenerate,
+      isLoading: isLoading,
+      onNext: handleGenerate,
     };
 
-    if (!quoteRequested) {
-      controls.showNext = true;
-      controls.nextLabel = 'GENERAR COTIZACIÓN';
-      controls.canContinue = canGenerate;
-      controls.isLoading = isLoading;
-      controls.onNext = handleGenerate;
-    } else {
-      controls.showNext = false;
-      controls.backLabel = 'NUEVA COTIZACIÓN';
-    }
-
     setHeaderControls(controls);
-  }, [setHeaderControls, quoteRequested, canGenerate, isLoading, onBack, handleGenerate]);
+  }, [setHeaderControls, canGenerate, isLoading, onBack, handleGenerate]);
 
   return (
     <div className="step">
@@ -92,15 +108,23 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
           <span className="summary-value">{file ? (file.name || 'Cargado') : '--'}</span>
         </div>
         <div className="summary-row">
-          <span className="summary-label">Unidades y dimensiones</span>
+          <span className="summary-label">Material</span>
+          <span className="summary-value">{material || '--'}</span>
+        </div>
+        <div className="summary-row">
+          <span className="summary-label">Dimensiones</span>
           <span className="summary-value">{dimensionsText}</span>
         </div>
         <div className="summary-row">
-          <span className="summary-label">Material</span>
-          <span className="summary-value">
-            {material ? `${material} (${thickness} mm${finish ? `, ${finish}` : ''})` : '--'}
-          </span>
+          <span className="summary-label">Espesor</span>
+          <span className="summary-value">{thickness ? `${thickness} mm` : '--'}</span>
         </div>
+        {finish && (
+          <div className="summary-row">
+            <span className="summary-label">Terminación</span>
+            <span className="summary-value">{finish}</span>
+          </div>
+        )}
         <div className="summary-row">
           <span className="summary-label">Cantidad</span>
           <span className="summary-value">{quantity || '--'}</span>
@@ -108,18 +132,11 @@ function Step4({ wizardState, onBack, setHeaderControls }) {
       </div>
 
       {isLoading && (
-        <div className="loading">
-          <div className="spinner"></div>
-          <p>Generando cotización...</p>
-        </div>
-      )}
-
-      {quoteRequested && (
-        <div className="quote-success">
-          <FaCheckCircle className="success-icon" />
-          <h4>¡Cotización generada exitosamente!</h4>
-          <p className="success-message">La cotización se muestra en el panel de preview.</p>
-        </div>
+        <ProcessingModal
+          progress={progress}
+          title="Generando cotización..."
+          message="Estamos calculando el precio de tu cotización. Esto puede tomar unos segundos."
+        />
       )}
     </div>
   );

@@ -297,7 +297,7 @@ function Wizard() {
           </div>
 
           <div className="wizard-preview">
-            <Preview fileData={fileData} quoteData={quoteData} />
+            <Preview fileData={fileData} quoteData={quoteData} currentStep={currentStep} />
           </div>
         </div>
       </div>

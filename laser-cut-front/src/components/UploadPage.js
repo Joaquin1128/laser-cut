@@ -6,36 +6,15 @@ import './UploadPage.css';
 import dxfIcon from '../assets/icons/dxf.png';
 import { analizarArchivo } from '../services/api';
 import ErrorModal from './ErrorModal';
+import { simulateProcessingWithProgress } from '../utils/processingSimulator';
 import Header from './Header';
+import ProcessingModal from './ProcessingModal';
 
 function UploadPage() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    if (isProcessing) {
-      setProgress(0);
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(interval);
-            return prev;
-          }
-          const progressFactor = 1 - (prev / 90);
-          const minIncrement = 0.5;
-          const maxIncrement = 3 * progressFactor;
-          const increment = minIncrement + Math.random() * (maxIncrement - minIncrement);
-          return Math.min(prev + increment, 90);
-        });
-      }, 100);
-
-      return () => clearInterval(interval);
-    } else {
-      setProgress(0);
-    }
-  }, [isProcessing]);
 
   const onDrop = async (acceptedFiles) => {
     if (!acceptedFiles || acceptedFiles.length === 0) return;
@@ -46,28 +25,13 @@ function UploadPage() {
     }
     setIsProcessing(true);
     setError(null);
-    setProgress(0);
     
     try {
-      const minProcessingTime = 3000;
-      const analysisPromise = analizarArchivo(selectedFile);
+      const apiPromise = analizarArchivo(selectedFile);
       
-      const [data] = await Promise.all([
-        analysisPromise,
-        new Promise(resolve => setTimeout(resolve, minProcessingTime))
-      ]);
-      
-      const steps = 20;
-      const stepDuration = 30;
-      const startProgress = 90;
-      
-      for (let i = 1; i <= steps; i++) {
-        await new Promise(resolve => setTimeout(resolve, stepDuration));
-        const newProgress = startProgress + ((100 - startProgress) * (i / steps));
-        setProgress(newProgress);
-      }
-      
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const data = await simulateProcessingWithProgress(apiPromise, setProgress, {
+        minProcessingTime: 3000,
+      });
       
       navigate('/wizard', {
         state: {
@@ -78,7 +42,6 @@ function UploadPage() {
     } catch (err) {
       setError(err.message || 'Error al analizar el archivo');
       setIsProcessing(false);
-      setProgress(0);
     }
   };
 
@@ -146,7 +109,7 @@ function UploadPage() {
             <FaFileUpload className="process-step-icon" />
             <h3 className="process-step-title">Subí tu diseño</h3>
             <p className="process-step-description">
-              Cargá tu archivo 2D o 3D, elegí material y proceso. Recibí la cotización al instante.
+              Cargá tu archivo 2D, elegí material y cantidad. Recibí la cotización al instante.
             </p>
           </div>
 
@@ -169,44 +132,11 @@ function UploadPage() {
       </div>
 
       {isProcessing && (
-        <div className="processing-modal-overlay">
-          <div className="processing-modal">
-            <div className="circular-progress-container">
-              <svg className="circular-progress" viewBox="0 0 120 120">
-                <circle
-                  className="circular-progress-background"
-                  cx="60"
-                  cy="60"
-                  r="54"
-                  fill="none"
-                  stroke="#e5e5e5"
-                  strokeWidth="8"
-                />
-                <circle
-                  className="circular-progress-foreground"
-                  cx="60"
-                  cy="60"
-                  r="54"
-                  fill="none"
-                  stroke="#d32f2f"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={`${2 * Math.PI * 54}`}
-                  strokeDashoffset={`${2 * Math.PI * 54 * (1 - progress / 100)}`}
-                  transform="rotate(-90 60 60)"
-                  style={{ transition: 'stroke-dashoffset 0.3s ease' }}
-                />
-              </svg>
-              <div className="circular-progress-text">
-                <span className="progress-percentage">{Math.round(progress)}%</span>
-              </div>
-            </div>
-            <h2 className="processing-modal-title">Procesando archivo...</h2>
-            <p className="processing-modal-message">
-              Estamos analizando tu archivo DXF. Esto puede tomar unos segundos.
-            </p>
-          </div>
-        </div>
+        <ProcessingModal
+          progress={progress}
+          title="Procesando archivo..."
+          message="Estamos analizando tu archivo DXF. Esto puede tomar unos segundos."
+        />
       )}
 
       {error && (

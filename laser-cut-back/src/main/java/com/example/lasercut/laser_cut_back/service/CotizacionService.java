@@ -39,10 +39,10 @@ public class CotizacionService {
         if (material == null) {
             throw new BadRequestException("Material es requerido");
         }
-        String m = material.trim().toLowerCase();
-        if (!"hierro".equals(m) && !"inoxidable".equals(m)) {
-            throw new BadRequestException("Material no soportado. Opciones: 'hierro' o 'inoxidable'");
-        }
+        // String m = material.trim().toLowerCase();
+        // if (!"hierro".equals(m) && !"inoxidable".equals(m)) {
+        //     throw new BadRequestException("Material no soportado. Opciones: 'hierro' o 'inoxidable'");
+        // }
     }
 
     private double round(double v, int decimals) {

@@ -233,12 +233,12 @@
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: 1rem;
-  border: none;
 }
 
 .wizard-step-wrapper .wizard-header-buttons .btn-primary {
   background: var(--color-primary);
   color: #ffffff;
+  border: 1px solid transparent;
 }
 
 .wizard-step-wrapper .wizard-header-buttons .btn-primary:hover:not(:disabled) {
