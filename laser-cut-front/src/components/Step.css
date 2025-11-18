@@ -359,6 +359,7 @@
 }
 .quantity-input[type=number] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .checkbox-label {

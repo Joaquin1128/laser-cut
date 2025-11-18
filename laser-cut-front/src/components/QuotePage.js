@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './QuotePage.css';
 import './Step.css';
 import './Wizard.css';
 import Header from './Header';
 import Preview from './Preview';
+import CartModal from './CartModal';
+import { useCart } from '../context/CartContext';
 
 function QuotePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { addToCart } = useCart();
+  const [showCartModal, setShowCartModal] = useState(false);
   
   const { quoteData, fileData, file, material, thickness, finish, quantity } = location.state || {};
 
@@ -27,8 +31,34 @@ function QuotePage() {
   };
 
   const handleAddToCart = () => {
-    // LÓGICA DE AÑADIR AL CARRITO
-    console.log('Añadir al carrito', quoteData);
+    let previewUrl = null;
+    if (fileData?.vistaPreviaBase64) {
+      try {
+        const decodedSvg = atob(fileData.vistaPreviaBase64);
+        previewUrl = `data:image/svg+xml;base64,${fileData.vistaPreviaBase64}`;
+      } catch (e) {
+        console.error('Error generating preview URL:', e);
+      }
+    }
+    
+    const cartItem = {
+      archivo: {
+        nombre: file?.name || 'Sin nombre',
+        dimensiones: `${quoteData.ancho} × ${quoteData.alto} mm`,
+        urlPreview: previewUrl,
+      },
+      material: {
+        nombre: quoteData.material || '--',
+        espesor: quoteData.espesor || 0,
+      },
+      terminacion: finish || null,
+      cantidad: quoteData.cantidad || 1,
+      precioUnitario: quoteData.precioUnitario || (quoteData.precioTotal / (quoteData.cantidad || 1)),
+      precioTotal: quoteData.precioTotal || 0,
+    };
+
+    addToCart(cartItem);
+    setShowCartModal(true);
   };
 
   return (
@@ -97,6 +127,10 @@ function QuotePage() {
           <Preview fileData={fileData} quoteData={quoteData} currentStep={5} />
         </div>
       </div>
+
+      {showCartModal && (
+        <CartModal onClose={() => setShowCartModal(false)} />
+      )}
     </div>
   );
 }

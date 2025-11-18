@@ -44,14 +44,10 @@ export async function analizarArchivo(file) {
 
 export async function calcularCotizacion({ archivo, material, espesor, cantidad, unidad }) {
   try {
-    const normalizedMaterial = material === 'Hierro' ? 'hierro' 
-                               : material === 'Acero Inoxidable' ? 'inoxidable' 
-                               : material.toLowerCase();
-    
     const formData = new FormData();
     formData.append('archivo', archivo);
     formData.append('espesor', espesor);
-    formData.append('material', normalizedMaterial);
+    formData.append('material', material);
     formData.append('cantidad', cantidad);
     formData.append('unidad', unidad);
 
