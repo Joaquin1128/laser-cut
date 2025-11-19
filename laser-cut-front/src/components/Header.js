@@ -10,7 +10,7 @@ function Header({ containerClass = 'wizard-header-top', logoClass = 'wizard-logo
   const cartItemCount = getCartItemCount();
 
   const handleCartClick = () => {
-    navigate('/carrito');
+    navigate('/cart');
   };
 
   return (

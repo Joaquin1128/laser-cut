@@ -19,7 +19,7 @@ function CartModal({ onClose }) {
 
   const handleGoToCart = () => {
     onClose?.();
-    navigate('/carrito');
+    navigate('/cart');
   };
 
   const handleOverlayClick = (event) => {
